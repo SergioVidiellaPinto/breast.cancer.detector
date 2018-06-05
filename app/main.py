@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
 
-import sys
 import numpy as np
 from flask import Flask
 from flask import jsonify
 from flask import request
 from flask import abort
 
-import src.inputanalyzer
+import src.inputanalyzer as inputanalyzer
 from src.classifiersvm import ClassifierSVM
 
 app = Flask(__name__)
