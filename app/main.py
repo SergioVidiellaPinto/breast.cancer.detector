@@ -31,7 +31,7 @@ def classify_input():
     res = []
     
     for idx, pred in zip(input_data[:, 0], predictions):
-        res.append({"id": idx, "class": pred})
+        res.append({"id": str(idx), "class": str(pred)})
         
     result = {
         'result': res
@@ -68,7 +68,7 @@ def predict_class():
         
     result = {
         'id': request.json['id'],
-        'class': prediction[0]
+        'class': str(prediction[0])
     }
     
     return jsonify(result)
