@@ -10,7 +10,7 @@ from classifierann import ClassifierANN
 import inputanalyzer
 
 
-def build_classifier(optimizer, units, loss):
+def build_classifier(optimizer, units):
     """Build a parametrizable classifier with two Hidden Layers"""
     
     classifier = Sequential()
@@ -28,7 +28,7 @@ def build_classifier(optimizer, units, loss):
                          activation = 'sigmoid'))
     
     # Compile optimizing accuracy
-    classifier.compile(optimizer = optimizer, loss = loss, 
+    classifier.compile(optimizer = optimizer, loss = 'binary_crossentropy', 
                        metrics = ['accuracy'])
     
     return classifier
@@ -41,8 +41,7 @@ def hyper_parametrization(X_train, y_train):
     parameters = {'batch_size': [10, 50],
                   'epochs': [100, 500],
                   'optimizer': ['adam', 'rmsprop'],
-                  'units': [10, 50],
-                  'loss': ['mean_squared_error', 'binary_crossentropy']}
+                  'units': [10, 50]}
     
     grid_search = GridSearchCV(estimator = classifier,
                                param_grid = parameters,
@@ -59,11 +58,10 @@ def hyper_parametrization(X_train, y_train):
 def train():
     """Train a new model based in the best possible parameters"""
     
-    X_train, X_test, y_train, y_test = inputanalyzer.prepare_input()
+    X_train, X_test, y_train, y_test = inputanalyzer.prepare_input(binarize_input=True, normalize=True)
     
     # Get best parameteres
     best_parameters = hyper_parametrization(X_train, y_train)
-    print(best_parameters)
     
     # Create the ANN and train it with the obtained best parameters
     classifier = build_classifier(best_parameters['optimizer'], 
@@ -77,13 +75,11 @@ def train():
     resultClassifier.save_model()
     resultClassifier.save_weights()
     
-    scores = resultClassifier.classifier.evaluate(X_test, y_test, verbose=0)
-    print(scores)
-    
     # Make a prediction and return the Confusion Matrix, so it can be analyzed
     y_pred = resultClassifier.make_prediction(X_test)
     cm = confusion_matrix(y_test, y_pred)
     
+    print(best_parameters)
     print(cm)
     
 

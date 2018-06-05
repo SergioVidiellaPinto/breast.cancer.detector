@@ -10,38 +10,40 @@ from sklearn.model_selection import train_test_split
 import config
 
 
-def prepare_input(missing_data="drop", test_size=0.2, random=0):
+def prepare_input(missing_data="drop", test_size=0.2, random=0, 
+                  binarize_output=False, normalize=False):
     """Prepare input data for training model"""
     
     # Read the data and generate a matrix of integers and NaN values
     dataset = read_input_data()
     
     # Handle the missing data
+    # Separate the input and output values
     if missing_data == "drop":
         dataset.dropna(inplace=True)
+        X = dataset.iloc[:, 1:10].values
+        X = X.astype(float)
+        y = dataset.iloc[:, 10].values
     elif missing_data == "mean":
         imputer = Imputer(missing_values="NaN", strategy='mean', axis=1)
         imputer = imputer.fit(dataset)
         dataset = imputer.transform(dataset)
+        X = dataset[:, 1:10]
+        y = dataset[:, 10]
+    
+    if binarize_output:
+        y[y == int(config.get_value("data", "benign_value"))] = 0
+        y[y == int(config.get_value("data", "malignant_value"))] = 1
         
-    # Separate the input and output values
-    X = dataset.iloc[:, 1:10].values
-    X = X.astype(float)
-    y = dataset.iloc[:, 10].values
-    
-    # Binarize the output
-    y[y == int(config.get_value("data", "benign_value"))] = 0
-    y[y == int(config.get_value("data", "malign_value"))] = 1
-    
     # Split the dataset in training and test sets
     X_train, X_test, y_train, y_test = train_test_split(X, y, 
                                                         test_size = test_size,
                                                         random_state = random)
-    # Normalize the input train and test data
-    sc = StandardScaler()
-    X_train = sc.fit_transform(X_train)
-    X_test = sc.transform(X_test)
-    
+    if normalize:
+        sc = StandardScaler()
+        X_train = sc.fit_transform(X_train)
+        X_test = sc.transform(X_test)        
+        
     return X_train, X_test, y_train, y_test
 
 
@@ -86,8 +88,3 @@ def analyze_dataset():
         result["column_{}".format(i)] = analyze_column(i)
     
     return result
-
-
-if __name__ == "__main__":
-    dataset = read_input_data()
-    print(analyze_column(8))

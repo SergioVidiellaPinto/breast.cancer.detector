@@ -1,8 +1,6 @@
-from sklearn.model_selection import cross_val_score
 from keras.models import model_from_json
 import os
 
-import inputanalyzer
 import config
 
 
@@ -21,7 +19,7 @@ class ClassifierANN():
        
         model_json = self.classifier.to_json()
         file_path = "{}{}".format(os.path.dirname(os.path.realpath(__file__)),
-                     config.get_value("paths", "model_path"))
+                     config.get_value("paths", "model_nn"))
         with open(file_path, "w") as json_file:
             json_file.write(model_json)
 
@@ -30,14 +28,16 @@ class ClassifierANN():
         """Save the weights of the model as an HDF5 file"""
         
         file_path = "{}{}".format(os.path.dirname(os.path.realpath(__file__)),
-                     config.get_value("paths", "weights_path"))
+                     config.get_value("paths", "weights_nn"))
         self.classifier.save_weights(file_path)
         
     
     def load_model(self):
         """Load json and create model"""
         
-        json_file = open(config.get_value("paths", "model_path"), 'r')
+        file_path = "{}{}".format(os.path.dirname(os.path.realpath(__file__)),
+                     config.get_value("paths", "model_nn"))
+        json_file = open(file_path, 'r')
         loaded_model_json = json_file.read()
         json_file.close()
         self.classifier = model_from_json(loaded_model_json)
@@ -46,20 +46,9 @@ class ClassifierANN():
     def load_weights(self):
         """Load weights into new model"""
         
-        self.classifier.load_weights(config.get_value("paths", "weights_path"))
-    
-    
-    def crossvalidate_model(self, cv=10):
-        """Make a crossvalidation over the model and obtain the mean accuracy
-        and its variance"""
-        
-        X_train, X_test, y_train, y_test = inputanalyzer.prepare_input()
-        accuracies = cross_val_score(estimator = self.classifier,
-                                     X = X_train, y = y_train, cv = cv)
-        mean = accuracies.mean()
-        variance = accuracies.std()
-        
-        return mean, variance
+        file_path = "{}{}".format(os.path.dirname(os.path.realpath(__file__)),
+                    config.get_value("paths", "weights_nn"))
+        self.classifier.load_weights(file_path)
     
     
     def make_prediction(self, input_values, th=0.5):
@@ -69,10 +58,3 @@ class ClassifierANN():
         prediction = (prediction > 0.5)
         
         return prediction
-    
-
-if __name__ == '__main__':
-    c = ClassifierANN()
-    c.load_model()
-    c.load_weights()
-    c.classifier.score
