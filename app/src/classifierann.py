@@ -1,5 +1,5 @@
-from keras.models import model_from_json
 import os
+from keras.models import model_from_json
 
 import src.config as config
 
