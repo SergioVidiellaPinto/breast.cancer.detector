@@ -41,7 +41,7 @@ def classify_input():
 
 
 @app.route('/api/v1.0/prediction', methods=['POST'])
-def classify_input():
+def predict_class():
     request.get_json(force=True)
     if not request.json or not 'id' in request.json \
     or not 'clump_thickness' in request.json \
