@@ -69,9 +69,8 @@ def analyze_column(column):
     
     dataset = read_input_data()
     X = dataset.iloc[:, 1:10].values
-    X = X.astype(float)
-    
     result = {"value_nan": X[:, column].tolist().count(np.nan)}
+    X = X.astype(float)
     
     for i in range(int(config.get_value("data", "min_value")),
                    int(config.get_value("data", "max_value")) + 1):

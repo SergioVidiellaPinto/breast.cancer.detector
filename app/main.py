@@ -21,6 +21,7 @@ def update_submissions():
 
 @app.route('/api/v1.0/classify', methods=['POST'])
 def classify_input():
+    print(request.json)
     if not request.json or not 'inputs' in request.json:
             abort(400)
         
