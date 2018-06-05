@@ -84,6 +84,6 @@ def analyze_dataset():
     
     result = {}
     for i in range(9):
-        result["column_{}".format(i)] = analyze_column(i)
+        result["column_{}".format(i+1)] = analyze_column(i)
     
     return result
