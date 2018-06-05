@@ -7,7 +7,7 @@ from sklearn.preprocessing import Imputer
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
 
-import config
+import src.config as config
 
 
 def prepare_input(missing_data="drop", test_size=0.2, random=0, 

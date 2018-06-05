@@ -1,0 +1,3 @@
+Flask==0.11.1
+keras==2.1.6
+sckit-learn==0.19.1

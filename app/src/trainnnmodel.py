@@ -6,8 +6,8 @@ from sklearn.metrics import confusion_matrix
 from keras.models import Sequential
 from keras.layers import Dense
 
-from classifierann import ClassifierANN
-import inputanalyzer
+from src.classifierann import ClassifierANN
+import src.inputanalyzer as inputanalyzer
 
 
 def build_classifier(optimizer, units):

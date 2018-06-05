@@ -1,7 +1,7 @@
 import os
 import pickle
 
-import config
+import src.config as config
 
 
 class ClassifierSVM():
@@ -27,7 +27,7 @@ class ClassifierSVM():
         file_path = "{}{}".format(os.path.dirname(os.path.realpath(__file__)),
                      config.get_value("paths", "model_svm"))
         self.classifier = pickle.load(open(file_path, 'rb'))
-        
+    
     
     def make_prediction(self, input_values, th=0.5):
         """Given an input fitting the model, make a prediction of its class"""

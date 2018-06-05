@@ -4,8 +4,8 @@ from sklearn.model_selection import GridSearchCV
 from sklearn.metrics import confusion_matrix
 from sklearn import svm
 
-import inputanalyzer
-from classifiersvm import ClassifierSVM
+import src.inputanalyzer as inputanalyzer
+from src.classifiersvm import ClassifierSVM
 
 
 def build_classifier(C, kernel):

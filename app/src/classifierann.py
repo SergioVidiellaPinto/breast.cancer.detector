@@ -1,7 +1,7 @@
 from keras.models import model_from_json
 import os
 
-import config
+import src.config as config
 
 
 class ClassifierANN():
