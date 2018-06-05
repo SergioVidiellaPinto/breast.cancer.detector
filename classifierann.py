@@ -1,5 +1,6 @@
 from sklearn.model_selection import cross_val_score
 from keras.models import model_from_json
+import os
 
 import inputanalyzer
 import config
@@ -19,14 +20,18 @@ class ClassifierANN():
         """Save the model as a JSON"""
        
         model_json = self.classifier.to_json()
-        with open(config.get_value("paths", "model_path"), "w") as json_file:
+        file_path = "{}{}".format(os.path.dirname(os.path.realpath(__file__)),
+                     config.get_value("paths", "model_path"))
+        with open(file_path, "w") as json_file:
             json_file.write(model_json)
 
 
     def save_weights(self):
         """Save the weights of the model as an HDF5 file"""
         
-        self.classifier.save_weights(config.get_value("paths", "weights_path"))
+        file_path = "{}{}".format(os.path.dirname(os.path.realpath(__file__)),
+                     config.get_value("paths", "weights_path"))
+        self.classifier.save_weights(file_path)
         
     
     def load_model(self):
