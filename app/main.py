@@ -4,6 +4,8 @@ import sys
 import numpy as np
 from flask import Flask
 from flask import jsonify
+from flask import request
+from flask import abort
 
 import src.inputanalyzer
 from src.classifiersvm import ClassifierSVM
@@ -23,11 +25,11 @@ def classify_input():
     if not request.json or not 'inputs' in request.json:
             abort(400)
         
-        pred = classifier.make_prediction(np.array(request.json['inputs']))
-        prediction = {
-            'result': pred
-        }
-        return jsonify({'task': prediction})
+    pred = classifier.make_prediction(np.array(request.json['inputs']))
+    prediction = {
+        'result': pred
+    }
+    return jsonify({'task': prediction})
 
 
 if __name__ == '__main__':
