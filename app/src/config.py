@@ -14,5 +14,5 @@ def get_value(section, parameter):
 	try:
 		value = config_parser.get(section, parameter)
 	except Exception:
-		raise Exception("Parameter {} missing from section {} in configuration file {}".format(parameter, section, configPath))
+		raise Exception("Parameter {} missing from section {} in configuration file {}".format(parameter, section, config_path))
 	return value
